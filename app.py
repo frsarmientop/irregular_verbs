@@ -2,16 +2,11 @@ import streamlit as st
 import pandas as pd
 import random
 
-st.set_page_config(page_title="Irregular Verbs Quiz2 MAPI SARMIENTO TAMAYO", page_icon="📚")
+st.set_page_config(page_title="Irregular Verbs Quiz", page_icon="📚")
 
 @st.cache_data
 def load_data():
-    df = pd.read_csv("irregular_verbs.csv")
-    df.columns = [col.strip() for col in df.columns]
-    df["present"] = df["present"].str.strip()
-    df["past"] = df["past"].str.strip()
-    df["translation"] = df["translation"].str.strip()
-    return df
+    return pd.read_csv("irregular_verbs.csv")
 
 verbs = load_data()
 
@@ -31,11 +26,12 @@ if "awaiting_answer" not in st.session_state:
 
 def new_question():
     """Selecciona un verbo aleatorio y resetea el input."""
-    row = verbs.sample().iloc[0]
+    idx = random.randint(0, len(verbs) - 1)
+    row = verbs.iloc[idx]
     st.session_state.current = {
         "present": row["present"],
         "past": row["past"],
-        "translation": row["translation"]
+        "translation": row.get("translation", "")
     }
     st.session_state.input_key += 1
     st.session_state.awaiting_answer = True
@@ -44,7 +40,7 @@ def new_question():
 if st.session_state.current is None and not st.session_state.finished:
     new_question()
 
-st.title("📚 Irregular Verbs Quiz con Traducción")
+st.title("📚 Irregular Verbs Quiz2 Maria Paz Sarmiento")
 
 if not st.session_state.finished:
     verb = st.session_state.current
@@ -71,9 +67,9 @@ if not st.session_state.finished:
             if verb["translation"]:
                 st.info(f"Traducción: **{verb['translation']}**")
 
-        # Botón Siguiente pregunta
-        if st.button("Siguiente pregunta"):
-            new_question()
+            # Botón Siguiente pregunta
+            if st.button("Siguiente pregunta"):
+                new_question()
 
     # ---- Botón Terminar ----
     with col2:

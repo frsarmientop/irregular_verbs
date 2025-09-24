@@ -1,7 +1,8 @@
 import streamlit as st
 import pandas as pd
+import random
 
-st.set_page_config(page_title="Irregular Verbs Quiz2 Maria Paz Sarmiento", page_icon="📚")
+st.set_page_config(page_title="Irregular Verbs Quiz", page_icon="📚")
 
 @st.cache_data
 def load_data():
@@ -9,7 +10,7 @@ def load_data():
 
 verbs = load_data()
 
-# Estado
+# ----- Estado de sesión -----
 if "score" not in st.session_state:
     st.session_state.score = 0
 if "total" not in st.session_state:
@@ -19,18 +20,23 @@ if "finished" not in st.session_state:
 if "current" not in st.session_state:
     st.session_state.current = None
 if "input_key" not in st.session_state:
-    st.session_state.input_key = 0  # para refrescar el input
+    st.session_state.input_key = 0
+if "awaiting_answer" not in st.session_state:
+    st.session_state.awaiting_answer = True   # <-- NUEVO: controla si hay que responder
 
 def new_question():
-    row = verbs.sample(1).iloc[0]
+    """Selecciona un verbo aleatorio y resetea el input."""
+    idx = random.randint(0, len(verbs) - 1)
+    row = verbs.iloc[idx]
     st.session_state.current = {
         "present": row["present"],
         "past": row["past"],
         "translation": row.get("translation", "")
     }
-    # cada vez que hay nueva pregunta cambiamos la clave
     st.session_state.input_key += 1
+    st.session_state.awaiting_answer = True
 
+# Si no hay pregunta actual, crear la primera
 if st.session_state.current is None and not st.session_state.finished:
     new_question()
 
@@ -40,7 +46,7 @@ if not st.session_state.finished:
     verb = st.session_state.current
     st.subheader(f"Escribe el pasado de: **{verb['present']}**")
 
-    # key dinámico: al cambiar, el input se “resetea”
+    # Input se “resetea” con cada nueva pregunta
     answer = st.text_input(
         "Tu respuesta:",
         key=f"answer_{st.session_state.input_key}"
@@ -48,9 +54,12 @@ if not st.session_state.finished:
 
     col1, col2 = st.columns(2)
 
+    # ---- Botón Comprobar ----
     with col1:
-        if st.button("Comprobar"):
+        if st.session_state.awaiting_answer and st.button("Comprobar"):
             st.session_state.total += 1
+            st.session_state.awaiting_answer = False  # Evita dobles clics
+
             if answer.strip().lower() == verb["past"].lower():
                 st.session_state.score += 1
                 st.success("✅ Correcto!")
@@ -60,8 +69,10 @@ if not st.session_state.finished:
             if verb["translation"]:
                 st.info(f"Traducción: **{verb['translation']}**")
 
-            new_question()  # esto cambia input_key -> limpia el campo
+            # Generar automáticamente la próxima pregunta
+            new_question()
 
+    # ---- Botón Terminar ----
     with col2:
         if st.button("Terminar cuestionario"):
             st.session_state.finished = True
@@ -80,3 +91,4 @@ else:
         st.session_state.finished = False
         st.session_state.current = None
         st.session_state.input_key = 0
+        st.session_state.awaiting_answer = True

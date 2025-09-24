@@ -57,13 +57,13 @@ def check_answer():
     if verb["translation"]:
         st.session_state.translation = verb["translation"]
 
-# Si no hay pregunta actual, crear la primera
-if st.session_state.current is None and not st.session_state.finished:
-    new_question()
-
-st.title("📚 Irregular Verbs Quiz-2 ** Welcome Maria Paz Sarmiento Tamayo * MAPIs CHAMPIONS")
-
 for i in range(10):
+    # Si no hay pregunta actual, crear la primera
+    if st.session_state.current is None and not st.session_state.finished:
+        new_question()
+
+    st.title("📚 Irregular Verbs Quiz-2 ** Welcome Maria Paz Sarmiento Tamayo * MAPIs CHAMPIONS")
+
     if not st.session_state.finished:
         verb = st.session_state.current
         hint_type = st.session_state.hint_type
@@ -99,7 +99,6 @@ for i in range(10):
         with col2:
             if st.button("Terminar cuestionario"):
                 st.session_state.finished = True
-
 
 st.subheader("🎯 Resultado final")
 st.write(f"Aciertos: **{st.session_state.score}**")

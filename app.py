@@ -68,8 +68,8 @@ if not st.session_state.finished:
         st.subheader(f"Escribe el pasado de: **{verb['present']}**")
     elif hint_type == "translation":
         st.subheader(f"Escribe el pasado del verbo traducido como: **{verb['translation']}**")
-    elif hint_type == "past":
-        st.subheader(f"¿Cuál es el presente del verbo que también se escribe como: **{verb['present']}**?")
+    elif hint_type == "present":
+        st.subheader(f"¿Cuál es el presente del verbo que también se escribe como: **{verb['past']}**?")
 
     st.text_input(
         "Tu respuesta:",

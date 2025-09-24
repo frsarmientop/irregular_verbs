@@ -2,7 +2,7 @@ import pandas as pd
 import random
 import streamlit as st
 
-# Cargar el archivo CSV con los verbos irregulares subir
+# Cargar el archivo CSV con los verbos irregulares subir necesidad
 df = pd.read_csv("irregular_verbs.csv")
 
 # Eliminar posibles columnas vacías o sin nombre

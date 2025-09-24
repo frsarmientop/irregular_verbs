@@ -1,4 +1,4 @@
-# irregular_verbs
+# irregular_verbs pruebas
 echo "# irregular_verbs" >> README.md
 git init
 git add README.md

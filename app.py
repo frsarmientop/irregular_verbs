@@ -42,7 +42,7 @@ def new_question():
     st.session_state.translation = ""
 
 def check_answer():
-    if hint_type == "pasado":
+    if hint_type == "past":
         verb = st.session_state.current
         answer = st.session_state[f"answer_{st.session_state.input_key}"]
         st.session_state.total += 1

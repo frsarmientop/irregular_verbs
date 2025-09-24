@@ -69,56 +69,56 @@ def check_answer():
 if st.session_state.current is None and not st.session_state.finished:
     new_question()
 
-for i in range(10):
-    st.title("📚 Irregular Verbs Quiz-2 ** Welcome Maria Paz Sarmiento Tamayo * MAPIs CHAMPIONS")
+st.title("📚 Irregular Verbs Quiz-2 ** Welcome Maria Paz Sarmiento Tamayo * MAPIs CHAMPIONS")
 
-    if not st.session_state.finished:
-        verb = st.session_state.current
-        hint_type = st.session_state.hint_type
+if not st.session_state.finished:
+    verb = st.session_state.current
+    hint_type = st.session_state.hint_type
 
-        if hint_type == "present":
-            st.subheader(f"Escribe el pasado de: **{verb['present']}**")
-        elif hint_type == "translation":
-            st.subheader(f"Escribe el pasado del verbo traducido como: **{verb['translation']}**")
-        elif hint_type == "past":
-            st.subheader(f"¿Cuál es el presente del verbo que también se escribe como: **{verb['past']}**?")
+    if hint_type == "present":
+        st.subheader(f"Escribe el pasado de: **{verb['present']}**")
+    elif hint_type == "translation":
+        st.subheader(f"Escribe el pasado del verbo traducido como: **{verb['translation']}**")
+    elif hint_type == "past":
+        st.subheader(f"¿Cuál es el presente del verbo que también se escribe como: **{verb['past']}**?")
 
-        st.text_input(
-            "Tu respuesta:",
-            key=f"answer_{st.session_state.input_key}",
-            on_change=check_answer
-        )
+    st.text_input(
+        "Tu respuesta:",
+        key=f"answer_{st.session_state.input_key}",
+        on_change=check_answer
+    )
 
-        col1, col2 = st.columns(2)
+    col1, col2 = st.columns(2)
 
-        with col1:
-            if st.session_state.awaiting_answer and st.button("Comprobar"):
-                check_answer()
+    with col1:
+        if st.session_state.awaiting_answer and st.button("Comprobar"):
+            check_answer()
 
-        if not st.session_state.awaiting_answer:
-            st.markdown(st.session_state.feedback)
-            if st.session_state.translation:
-                st.info(f"Traducción: **{st.session_state.translation}**")
+    if not st.session_state.awaiting_answer:
+        st.markdown(st.session_state.feedback)
+        if st.session_state.translation:
+            st.info(f"Traducción: **{st.session_state.translation}**")
 
-        if st.button("Siguiente pregunta"):
-            new_question()
-            st.rerun()
+    if st.button("Siguiente pregunta"):
+        new_question()
+        st.rerun()
 
-        with col2:
-            if st.button("Terminar cuestionario"):
-                st.session_state.finished = True
+    with col2:
+        if st.button("Terminar cuestionario"):
+            st.session_state.finished = True
 
-st.subheader("🎯 Resultado final")
-st.write(f"Aciertos: **{st.session_state.score}**")
-st.write(f"Total preguntas: **{st.session_state.total}**")
-if st.session_state.total > 0:
-    pct = 100 * st.session_state.score / st.session_state.total
-    st.write(f"Porcentaje: **{pct:.1f}%**")
-if st.button("Volver a empezar"):
-    st.session_state.score = 0
-    st.session_state.total = 0
-    st.session_state.finished = False
-    st.session_state.current = None
-    st.session_state.input_key = 0
-    st.session_state.awaiting_answer = True
-    st.rerun()
+else:
+    st.subheader("🎯 Resultado final")
+    st.write(f"Aciertos: **{st.session_state.score}**")
+    st.write(f"Total preguntas: **{st.session_state.total}**")
+    if st.session_state.total > 0:
+        pct = 100 * st.session_state.score / st.session_state.total
+        st.write(f"Porcentaje: **{pct:.1f}%**")
+    if st.button("Volver a empezar"):
+        st.session_state.score = 0
+        st.session_state.total = 0
+        st.session_state.finished = False
+        st.session_state.current = None
+        st.session_state.input_key = 0
+        st.session_state.awaiting_answer = True
+        st.rerun()

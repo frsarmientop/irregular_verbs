@@ -49,6 +49,9 @@ def check_answer():
     if answer.strip().lower() == verb["past"].lower():
         st.session_state.score += 1
         st.session_state.feedback = "✅ ¡Correcto!"
+    elif answer.strip().lower() == verb["present"].lower():
+        st.session_state.score += 1
+        st.session_state.feedback = "✅ ¡Correcto!"
     else:
         st.session_state.feedback = f"❌ Incorrecto. Respuesta correcta: {verb['past']}"
     if verb["translation"]:

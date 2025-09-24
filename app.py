@@ -22,7 +22,7 @@ if "current" not in st.session_state:
 if "input_key" not in st.session_state:
     st.session_state.input_key = 0
 if "awaiting_answer" not in st.session_state:
-    st.session_state.awaiting_answer = True  # <-- NUEVO: controla si hay que responder
+    st.session_state.awaiting_answer = True
 
 def new_question():
     """Selecciona un verbo aleatorio y resetea el input."""
@@ -35,43 +35,58 @@ def new_question():
     }
     st.session_state.input_key += 1
     st.session_state.awaiting_answer = True
+    st.session_state.feedback = ""
+    st.session_state.translation = ""
+
+def check_answer():
+    verb = st.session_state.current
+    answer = st.session_state[f"answer_{st.session_state.input_key}"]
+    st.session_state.total += 1
+    st.session_state.awaiting_answer = False
+    if answer.strip().lower() == verb["past"].lower():
+        st.session_state.score += 1
+        st.session_state.feedback = "✅ ¡Correcto!"
+    else:
+        st.session_state.feedback = f"❌ Incorrecto. Respuesta correcta: {verb['past']}"
+    if verb["translation"]:
+        st.session_state.translation = verb["translation"]
 
 # Si no hay pregunta actual, crear la primera
 if st.session_state.current is None and not st.session_state.finished:
     new_question()
 
-st.title("📚 Irregular Verbs Quiz2 Maria Paz Sarmiento")
+st.title("📚 Irregular Verbs Quiz con Traducción")
 
 if not st.session_state.finished:
     verb = st.session_state.current
     st.subheader(f"Escribe el pasado de: **{verb['present']}**")
 
-    # Input se “resetea” con cada nueva pregunta
-    answer = st.text_input(
+    # Input con verificación automática al presionar Enter
+    st.text_input(
         "Tu respuesta:",
-        key=f"answer_{st.session_state.input_key}"
+        key=f"answer_{st.session_state.input_key}",
+        on_change=check_answer
     )
 
     col1, col2 = st.columns(2)
 
-    # ---- Botón Comprobar ----
+    # Botón Comprobar manual (opcional)
     with col1:
         if st.session_state.awaiting_answer and st.button("Comprobar"):
-            st.session_state.total += 1
-            st.session_state.awaiting_answer = False  # Evita dobles clics
-            if answer.strip().lower() == verb["past"].lower():
-                st.session_state.score += 1
-                st.success("✅ ¡Correcto!")
-            else:
-                st.error(f"❌ Incorrecto. Respuesta correcta: {verb['past']}")
-            if verb["translation"]:
-                st.info(f"Traducción: **{verb['translation']}**")
+            check_answer()
 
-            # Botón Siguiente pregunta
-            if st.button("Siguiente pregunta"):
-                new_question()
+    # Mostrar retroalimentación si ya se respondió
+    if not st.session_state.awaiting_answer:
+        st.markdown(st.session_state.feedback)
+        if st.session_state.translation:
+            st.info(f"Traducción: **{st.session_state.translation}**")
 
-    # ---- Botón Terminar ----
+        # Botón Siguiente pregunta
+        if st.button("Siguiente pregunta"):
+            new_question()
+            st.experimental_rerun()
+
+    # Botón Terminar
     with col2:
         if st.button("Terminar cuestionario"):
             st.session_state.finished = True
@@ -90,3 +105,4 @@ else:
         st.session_state.current = None
         st.session_state.input_key = 0
         st.session_state.awaiting_answer = True
+        st.experimental_rerun()

@@ -12,10 +12,17 @@ if "total" not in st.session_state:
 if "finished" not in st.session_state:
     st.session_state.finished = False
 
+
 # ------------------------
 # Cargar datos
 # ------------------------
-verbs = pd.read_csv("data/verbs.csv")  # Ajusta la ruta si es distinta
+verbs = pd.read_csv("irregular_verbs.csv")  # Ajusta la ruta si es distinta
+
+# Eliminar posibles columnas vacías o sin nombre
+verbs = verbs.loc[:, ~verbs.columns.str.contains('^Unnamed')]
+
+# Título de la aplicación
+st.title("Práctica de Verbos Irregulares en Inglés MAPI 2")
 
 # ------------------------
 # Lógica de preguntas

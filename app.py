@@ -105,4 +105,4 @@ else:
         st.session_state.current = None
         st.session_state.input_key = 0
         st.session_state.awaiting_answer = True
-        st.experimental_rerun()
+        st.rerun()

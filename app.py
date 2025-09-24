@@ -39,3 +39,54 @@ def new_question():
 # Si no hay pregunta actual, crear la primera
 if st.session_state.current is None and not st.session_state.finished:
     new_question()
+
+st.title("📚 Irregular Verbs Quiz con Traducción")
+
+if not st.session_state.finished:
+    verb = st.session_state.current
+    st.subheader(f"Escribe el pasado de: **{verb['present']}**")
+
+    # Input se “resetea” con cada nueva pregunta
+    answer = st.text_input(
+        "Tu respuesta:",
+        key=f"answer_{st.session_state.input_key}"
+    )
+
+    col1, col2 = st.columns(2)
+
+    # ---- Botón Comprobar ----
+    with col1:
+        if st.session_state.awaiting_answer and st.button("Comprobar"):
+            st.session_state.total += 1
+            st.session_state.awaiting_answer = False  # Evita dobles clics
+            if answer.strip().lower() == verb["past"].lower():
+                st.session_state.score += 1
+                st.success("✅ ¡Correcto!")
+            else:
+                st.error(f"❌ Incorrecto. Respuesta correcta: {verb['past']}")
+            if verb["translation"]:
+                st.info(f"Traducción: **{verb['translation']}**")
+
+            # Botón Siguiente pregunta
+            if st.button("Siguiente pregunta"):
+                new_question()
+
+    # ---- Botón Terminar ----
+    with col2:
+        if st.button("Terminar cuestionario"):
+            st.session_state.finished = True
+
+else:
+    st.subheader("🎯 Resultado final")
+    st.write(f"Aciertos: **{st.session_state.score}**")
+    st.write(f"Total preguntas: **{st.session_state.total}**")
+    if st.session_state.total > 0:
+        pct = 100 * st.session_state.score / st.session_state.total
+        st.write(f"Porcentaje: **{pct:.1f}%**")
+    if st.button("Volver a empezar"):
+        st.session_state.score = 0
+        st.session_state.total = 0
+        st.session_state.finished = False
+        st.session_state.current = None
+        st.session_state.input_key = 0
+        st.session_state.awaiting_answer = True

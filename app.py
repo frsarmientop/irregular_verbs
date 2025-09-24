@@ -66,8 +66,6 @@ if not st.session_state.finished:
 
     if hint_type == "present":
         st.subheader(f"Escribe el pasado de: **{verb['present']}**")
-    elif hint_type == "past":
-        st.subheader(f"Escribe el presente de: **{verb['past']}**")
     elif hint_type == "translation":
         st.subheader(f"Escribe el pasado del verbo traducido como: **{verb['translation']}**")
     elif hint_type == "past":

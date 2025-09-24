@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 
-st.set_page_config(page_title="Irregular Verbos 2 - Maria Paz Sarmiento Tamayo", page_icon="📚")
+st.set_page_config(page_title="Irregular Verbs Quiz2 Maria Paz Sarmiento", page_icon="📚")
 
 @st.cache_data
 def load_data():

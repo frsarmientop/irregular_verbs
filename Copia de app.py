@@ -42,18 +42,26 @@ def new_question():
     st.session_state.translation = ""
 
 def check_answer():
-    verb = st.session_state.current
-    answer = st.session_state[f"answer_{st.session_state.input_key}"]
-    st.session_state.total += 1
-    st.session_state.awaiting_answer = False
-    if answer.strip().lower() == verb["past"].lower():
-        st.session_state.score += 1
-        st.session_state.feedback = "✅ ¡Correcto!"
-    elif answer.strip().lower() == verb["present"].lower():
-        st.session_state.score += 1
-        st.session_state.feedback = "✅ ¡Correcto!"
+    if hint_type == "past":
+        verb = st.session_state.current
+        answer = st.session_state[f"answer_{st.session_state.input_key}"]
+        st.session_state.total += 1
+        st.session_state.awaiting_answer = False
+        if answer.strip().lower() == verb["present"].lower():
+            st.session_state.score += 1
+            st.session_state.feedback = "✅ ¡Correcto!"
+        else:
+            st.session_state.feedback = f"❌ Incorrecto. Respuesta correcta: {verb['present']}"
     else:
-        st.session_state.feedback = f"❌ Incorrecto. Respuesta correcta: {verb['past']}"
+        verb = st.session_state.current
+        answer = st.session_state[f"answer_{st.session_state.input_key}"]
+        st.session_state.total += 1
+        st.session_state.awaiting_answer = False
+        if answer.strip().lower() == verb["past"].lower():
+            st.session_state.score += 1
+            st.session_state.feedback = "✅ ¡Correcto!"
+        else:
+            st.session_state.feedback = f"❌ Incorrecto. Respuesta correcta: {verb['past']}"
     if verb["translation"]:
         st.session_state.translation = verb["translation"]
 

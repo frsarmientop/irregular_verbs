@@ -84,7 +84,7 @@ if not st.session_state.finished:
         # Botón Siguiente pregunta
         if st.button("Siguiente pregunta"):
             new_question()
-            st.experimental_rerun()
+            st.rerun
 
     # Botón Terminar
     with col2:
@@ -105,4 +105,5 @@ else:
         st.session_state.current = None
         st.session_state.input_key = 0
         st.session_state.awaiting_answer = True
+        #error con rerun
         st.rerun()

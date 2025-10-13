@@ -69,7 +69,7 @@ def check_answer():
 if st.session_state.current is None and not st.session_state.finished:
     new_question()
 
-st.title("📚 Irregular Verbs Quiz-2 ** Welcome Maria Paz Sarmiento Tamayo * MAPIs CHAMPIONS")
+st.title("📚 Irregular Verbs Quiz-3 ** Welcome Maria Paz Sarmiento Tamayo * MAPIs CHAMPIONS")
 
 if not st.session_state.finished:
     verb = st.session_state.current
